@@ -1,5 +1,7 @@
 ### O Duzz Clean: (Referência à Does Clean)
 
+![alt text](https://github.com/duzzsys/duzz_clean/blob/master/WhatsApp%20Image%202020-04-18%20at%2013.48.28.jpeg)
+
 O Sistema Duzz Clean é um controlador de higiene de veículos, baseando seu controle na quilometragem rodada e outras análises coletadas ao decorrer do dia.
 O veículo é cadastrado no sistema por placa, modelo, marca etc.
 
@@ -20,12 +22,16 @@ Este app ainda pode ser usado para agendar ou verificar informações das limpez
     -> Fazer o controle via smartphone.
 
     -> Receber notificações sobre suas limpezas recomendadas dependendo da metragem rodada. Ou seja, após certa quantidade de km's rodados (Parâmetro do próprio usuário), o sistema recomendará nova higienização.
+
+    -> Receber notificações de alertas rotineiras. Exemplo, 'A lixeira já foi esvaziada? Descarte em local seguro'
     
     -> Receber interações e enteragir com o passageiro
     
     -> Acompanhar seu Rating e recomendações dos passageiros.
     
     -> Acompanhar os dados de limpeza via aplicativo, para saber quantas foram realizadas ou quanto resta de limpeza no refil.
+
+    -> Controlar limpeza dos componentes, cadastrando as datas que foram realizadas e prevendo as futuras. Exemplo: Limpeza do ar-condicionado ou lavagem externa.
 
 #### Duzz Clean Passageiro Features:
 
