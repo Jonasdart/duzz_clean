@@ -31,7 +31,7 @@ _____
 
 ### O sistema:
 
-O Sistema Duzz é um controlador de higiene de veículos, baseando seu controle na quilometragem rodada e outras análises coletadas ao decorrer do dia.
+O Sistema Duzz é um controlador de higiene de veículos, baseando seu controle na quilometragem rodada e outras análises coletadas ao decorrer do dia, cadastrador por placa, modelo, marca etc.
 
 O sistema conta com um raspberry que irá fazer a coleta dos dados de navegação (Metragem rodada) via GPS e calcular a proxima limpeza, levando em consideração o momento da limpeza anterior.
 
@@ -47,3 +47,5 @@ Com este aplicativo, será possível escolher qual ambiente do carro higiênizar
 (Aviso se o refil estiver no fim)
 
 (Ao invés de limpeza automatica, notificar o motorista de tempo sem limpeza.)
+
+(Dispersores à bateria 2032 espalhados pelo carro e podendo ser vendidos avulsos)

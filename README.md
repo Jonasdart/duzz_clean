@@ -24,4 +24,6 @@
     
     -> Solicitar higienização do veículo antes mesmo de entrar no mesmo.
 
+    -> Ler notificações dos aplicativos de viagens, como "Uber", "99", etc. para identificar a placa e modelo do carro e informar, de maneira instantânea se este carro possui o sistema de higienização automatizada da duzz e quando foi a última limpeza realizada.
+
 
