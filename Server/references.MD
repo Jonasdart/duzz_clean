@@ -21,7 +21,7 @@ Parametros
 
 ##### Example: 
 ````
-request = 'E,MOT,LIMPEZA,DADOS;data_nascimento,nascimento,km,tipo,objeto_limpos'
+request = 'E,MOT,LIMPEZA,DADOS;data_nascimento,nascimento,km,tipo,'objeto_limpos'
 ````
 ###### Tipos de requisição:
 'E' → Entrada de dados;

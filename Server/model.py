@@ -17,12 +17,16 @@ class Backend():
 
     def recusa_notificacao(self, carro, data, km):
         query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)
+        carro = self.database.commit_with_return(query)[0][0]
+        print(carro)
 
         query = self.gera_query.listar_colunas('notificacoes_recusas')
-        colunas = self.database.commit_with_return(query)
+        todas_colunas = self.database.commit_with_return(query)
+        colunas = []
+        for coluna in todas_colunas:
+            colunas.append(coluna[0])
         colunas = colunas[1:]
-
+        
         query = self.gera_query.inserir_na_tabela('notificacoes_recusas', colunas, [carro, data, km])
         self.database.commit_without_return(query)
 
@@ -31,7 +35,7 @@ class Backend():
 
     def nova_limpeza(self, carro, data, nascimento, km, tipo = 'Full', objetos_limpos = None):
         query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)
+        carro = self.database.commit_with_return(query)[0][0]
 
         query = self.gera_query.listar_colunas('limpezas')
         colunas = self.database.commit_with_return(query)
@@ -54,7 +58,7 @@ class Backend():
 
     def nova_manutencao(self, carro, tipo, date, date_future):
         query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)
+        carro = self.database.commit_with_return(query)[0][0]
 
         query = self.gera_query.listar_colunas('limpezas_geral')
         colunas = self.database.commit_with_return(query)
@@ -73,7 +77,7 @@ class Backend():
 
     def nova_avaliacao(self, carro, nota, comentario):
         query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)
+        carro = self.database.commit_with_return(query)[0][0]
 
         query = self.gera_query.listar_colunas('carros_satisfactions')
         colunas = self.database.commit_with_return(query)
@@ -91,7 +95,7 @@ class Backend():
 
     def buscar_limpeza(self, carro, limpeza):
         query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)
+        carro = self.database.commit_with_return(query)[0][0]
 
         query = self.gera_query.buscar_dados_da_tabela('limpeza', where= True, coluna_verificacao=['carro'], valor_where=carro)
 
@@ -102,7 +106,7 @@ class Backend():
     
     def buscar_manutencao(self, carro, manutencao):
         query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)
+        carro = self.database.commit_with_return(query)[0][0]
 
         query = self.gera_query.buscar_dados_da_tabela('limpezas_geral', where=True, coluna_verificacao=['carro'], valor_where=carro)
         manutencao = self.database.commit_with_return(query)
@@ -111,7 +115,7 @@ class Backend():
 
     def media_descuido(self, carro):
         query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)
+        carro = self.database.commit_with_return(query)[0][0]
 
         query = 'select id from nascimentos where nascimento = "Notificação"'
         id_notificacao = self.database.commit_with_return(query)
@@ -131,7 +135,7 @@ class Backend():
 
     def media_avaliacao_carro(self, carro):
         query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)
+        carro = self.database.commit_with_return(query)[0][0]
 
         query = self.gera_query.buscar_rating(carro)
         rating = self.database.commit_with_return(query)
@@ -141,7 +145,7 @@ class Backend():
 
     def ultima_limpeza_realizada(self, carro):
         query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)
+        carro = self.database.commit_with_return(query)[0][0]
 
         query = self.gera_query.buscar_ultima_limpeza_realizada(carro)
         ultima_limpeza_realizada = self.database.commit_with_return(query)

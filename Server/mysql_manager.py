@@ -11,8 +11,7 @@ class Gera_query(object):
 
     def buscar_id_carro(self, placa_carro):
         self.query = 'select id from carros where placa = '
-        self.query += str(placa_carro)
-
+        self.query += f'{str(placa_carro)}'
         return self.query
 
 
@@ -99,6 +98,7 @@ class Gera_query(object):
 
 
     def inserir_na_tabela(self, tabela, colunas, dados, string = False):
+
         """
         string é um booleano, que
         sendo verdadeiro indica que
@@ -124,7 +124,15 @@ class Gera_query(object):
                     self.query += ", "
             self.query += ")"
         else:
-            pass
+            cont = 0
+            for dado in dados:
+                cont += 1
+                self.query += f"{dado}"
+                print(dado)
+                if cont < len(dados):
+                    self.query += ", "
+            self.query += ")"
+
 
         return self.query
 

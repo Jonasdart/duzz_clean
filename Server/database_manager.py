@@ -1,9 +1,3 @@
-#encoding utf-8
-
-#__author__ = Jonas Duarte, duarte.jsystem@gmail.com
-#Python3
-__author__ = 'Jonas Duarte'
-
 import MySQLdb as mdb
 import configparser
 from mysql_manager import Gera_query
@@ -73,30 +67,21 @@ class Database():
 
 
     def commit_without_return(self, query):
-        if not self.connected:
-            try:
-                self.connect()
-            except:
-                raise
-            else:
-                self.commit_without_return(query)
-        else:  
-            try:
-                self.cursor.execute(query)
-            except:
-                raise
-            else:
-                self.bank.commit()
-                self.disconnect()
-                return True
+        print(query)
+        self.connect()
+        try:
+            print('exe')
+            self.cursor.execute(query)
+        except:
+            raise
+        else:
+            self.bank.commit()
+            self.disconnect()
+            return True
 
     def commit_with_return(self, query):
         results = None
-        if not self.connected:
-            try:
-                self.connect()
-            except:
-                raise
+        self.connect()
         try:
             self.cursor.execute(query)
         except:

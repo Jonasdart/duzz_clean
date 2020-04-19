@@ -60,14 +60,15 @@ class Controller(socketserver.BaseRequestHandler):
             }
 
             self.data_send(request_data)
-
+            print('OK')
+        print('fechando')
         self.request.close()
 
 
     def data_send(self, request_data):
-        server_response = self.rigger(request_data)
+        server_response = self.rigger(request_data).encode()
         lenght_of_response = len(server_response).to_bytes(2, byteorder='big')
-
+        print(server_response)
         self.request.send(lenght_of_response)
         self.request.send(server_response)
 
