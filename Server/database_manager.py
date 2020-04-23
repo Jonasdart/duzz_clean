@@ -91,3 +91,23 @@ class Database():
             self.disconnect()
 
         return results
+
+
+    def return_columns(self,  table):
+        query = self.gerador_de_query.listar_colunas(table)
+        columns = self.commit_with_return(query)
+        dict_columns = {
+
+        }
+
+        for column in columns:
+            dict_columns[column[0]] = [column[x+1] for x in range(len(column[1:]))]
+
+        return dict_columns
+
+    def return_car_id(self, license_plate):
+        query = self.gerador_de_query.search_car_id(license_plate)
+
+        car_id = self.commit_with_return(query)[0][0]
+
+        return car_id

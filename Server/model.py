@@ -15,65 +15,80 @@ class Backend():
         self.controller = Controller()
 
 
-    def recusa_notificacao(self, carro, data, km):
-        query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)[0][0]
-        print(carro)
-
-        query = self.gera_query.listar_colunas('notificacoes_recusas')
-        todas_colunas = self.database.commit_with_return(query)
-        colunas = []
-        for coluna in todas_colunas:
-            colunas.append(coluna[0])
-        colunas = colunas[1:]
+    def recusa_notificacao(self, data):
+        try:
+            license_plate = data['LicensePlate']
+            date = data['Date']
+            km = data['Km']
         
-        query = self.gera_query.inserir_na_tabela('notificacoes_recusas', colunas, [carro, data, km])
-        self.database.commit_without_return(query)
+            columns = self.database.return_columns('notificacoes_recusas')
+            car_id = self.database.return_car_id(license_plate)
+            values = car_id
+            values.append([x for x in list(data.values())[1:]])
+            query = self.gera_query.inserir_na_tabela('notificacoes_recusas', columns, [car_id, date, km])
 
-        return 'OK'
+            self.database.commit_without_return(query)
+
+            self.r = {
+                'message' : 'OK'
+            }
+        except Exception as e:
+            self.r = {
+                'error' : e
+            }
+
+        return self.r
 
 
-    def nova_limpeza(self, carro, data, nascimento, km, tipo = 'Full', objetos_limpos = None):
-        query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)[0][0]
+    def nova_limpeza(self, data):
+        try:
+            license_plate = data['LicensePlate']
+            date = data['Date']
+            birth_type = data['BirthType']
 
-        query = self.gera_query.listar_colunas('limpezas')
-        colunas = self.database.commit_with_return(query)
-        colunas = colunas[1:]
+            columns = self.database.return_columns('limpezas')
 
-        limpeza = {
-            'carro' : carro,
-            'date' : data,
-            'nascimento' : nascimento,
-            'km' : km, #Km's rodados desde a última limpeza
-            'tipo' : tipo,
-            'objetos_limpos' : objetos_limpos
-        }
-        print(limpeza)
-        query = self.gera_query.nova_limpeza(limpeza, colunas)
-        self.database.commit_without_return(query)
+            values = list(data.values())
+
+            query = self.gera_query.inserir_na_tabela('limpezas', list(columns.keys()), values)
+            self.database.commit_without_return(query)
+
+            self.r = {
+                'message' : 'OK'
+            }
     
-        return 'OK'
+        except Exception as e:
+            self.r = {
+                'error' : e
+            }
+
+        return self.r
 
 
-    def nova_manutencao(self, carro, tipo, date, date_future):
-        query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)[0][0]
+    def nova_manutencao(self, carro, tipo, date, date_future, data):
+        try:
+            license_plate = data['LicensePlate']
+            type = data['Type']
+            date = data['Date']
+            date_future = ['NextTime']
 
-        query = self.gera_query.listar_colunas('limpezas_geral')
-        colunas = self.database.commit_with_return(query)
-        colunas = colunas[1:]
+            car_id = self.database.return_car_id(license_plate)
+            columns = self.database.return_columns('limpezas_geral')
+            values = car_id
+            values.append([x for x in list(data.values())[1:]])
 
-        manutencao = {
-            'carro' : carro,
-            'tipo' : tipo,
-            'date' : date,
-            'date_future' : date_future
-        }
-        query = self.gera_query.nova_manutencao(manutencao, colunas)
-        self.database.commit_without_return(query)
+            query = self.gera_query.inserir_na_tabela('limpezas_geral', list(columns.keys()), values)
+            self.database.commit_without_return(query)
 
-        return 'OK'
+            self.r = {
+                'message' : 'OK'
+            }
+        except Exception as e:
+            self.r = {
+                'error' : e
+            }
+
+        return self.r
 
     def nova_avaliacao(self, carro, nota, comentario):
         query = self.gera_query.buscar_id_carro(carro)

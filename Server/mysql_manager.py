@@ -9,15 +9,16 @@ class Gera_query(object):
         self.query = ""
 
 
-    def buscar_id_carro(self, placa_carro):
+    def search_car_id(self, license_plate):
         self.query = 'select id from carros where placa = '
-        self.query += f'{str(placa_carro)}'
+        self.query += f'{str(license_plate)}'
+
         return self.query
 
 
-    def buscar_rating(self, carro):
+    def search_ratigng(self, car_id):
         self.query = 'select AVG(satisfaction) from carros_satisfactions '
-        self.query += f'where carro = {carro}'
+        self.query += f'where carro = {car_id}'
 
         return self.query
 
@@ -35,21 +36,6 @@ class Gera_query(object):
         from limpezas where notificacoes_recusas.carro={carro} AND
         limpezas.carro = {carro} AND limpezas.nascimento={id_notificacao}
         '''
-
-        return self.query
-
-
-    def nova_limpeza(self, dict, colunas):
-        valores = dict.values()
-        self.query = self.inserir_na_tabela('limpezas', colunas, valores)
-
-        return self.query
-
-    
-    def nova_manutencao(self, dict, colunas):
-        valores = dict.values()
-        
-        self.query = self.inserir_na_tabela('limpezas_geral', colunas, valores)
 
         return self.query
 
