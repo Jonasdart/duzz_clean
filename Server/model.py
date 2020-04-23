@@ -45,10 +45,21 @@ class Backend():
             license_plate = data['LicensePlate']
             date = data['Date']
             birth_type = data['BirthType']
+            km = data['Km']
+            clean_type = data['CleanType']
+            dispersers = list(data['CleanType']['LocalsDisperser'])
 
+            car_id = self.database.return_car_id(license_plate)
             columns = self.database.return_columns('limpezas')
 
-            values = list(data.values())
+            values = [
+                car_id,
+                date,
+                birth_type,
+                km,
+                clean_type,
+                dispersers
+            ]
 
             query = self.gera_query.inserir_na_tabela('limpezas', list(columns.keys()), values)
             self.database.commit_without_return(query)
