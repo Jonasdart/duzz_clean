@@ -34,8 +34,8 @@ create table limpezas
     `id` INT(12) PRIMARY KEY AUTO_INCREMENT,
     `carro` INT(12) NOT NULL,
     `date` DATE NOT NULL,
-    `nascimento` INT(12) NOT NULL,
     `km` VARCHAR(11) NOT NULL,
+    `nascimento` INT(12) NOT NULL,
     `tipo` VARCHAR(8) NOT NULL,
     `dispersores` TEXT NOT NULL
 )ENGINE = InnoDB;

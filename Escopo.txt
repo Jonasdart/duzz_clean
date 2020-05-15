@@ -1,0 +1,21 @@
+[23:18, 30/04/2020] Pablo: Cliente:
+
+[23:19, 30/04/2020] Pablo: pedir uma limpeza para o motorista
+
+[23:19, 30/04/2020] Pablo: Verificar a última ou as últimas limpezas do carro
+
+[23:19, 30/04/2020] Pablo: Avaliar o carro com QR
+
+[23:19, 30/04/2020] Pablo: Cliente somente isso
+
+[23:19, 30/04/2020] Pablo: Simples e funcional
+
+[23:20, 30/04/2020] Pablo: Motorista
+
+[23:20, 30/04/2020] Pablo: aceitar a notificação de limpeza ou recusar
+
+[23:21, 30/04/2020] Pablo: Realizar limpeza
+
+[23:21, 30/04/2020] Pablo: Última limpeza
+
+[23:25, 30/04/2020] Pablo: E limpeza automática
