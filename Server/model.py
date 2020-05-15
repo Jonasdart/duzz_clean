@@ -22,7 +22,6 @@ class Backend():
             birth_type = data['BirthType']
             km = data['Km']
             clean_type = data['CleanType']
-            dispersers = list(data['CleanType']['LocalsDisperser'])
 
             car_id = self.database.return_car_id(license_plate)
             columns = self.database.return_columns('limpezas')
@@ -32,8 +31,7 @@ class Backend():
                 date,
                 km,
                 birth_type,
-                clean_type,
-                dispersers
+                clean_type
             ]
 
             query = self.gera_query.inserir_na_tabela('limpezas', list(columns.keys()), values)
@@ -46,8 +44,10 @@ class Backend():
     
         except Exception as e:
             self.r = {
-                'error' : str(e),
-                'status': 400
+                'message' : {
+                    'error' : str(e)
+                },
+                'status' : 400
             }
 
         return self.r
@@ -65,7 +65,7 @@ class Backend():
             values = car_id
             values.append([x for x in list(data.values())[1:]])
 
-            query = self.gera_query.inserir_na_tabela('limpezas_geral', list(columns.keys()), values)
+            query = self.gera_query.inserir_na_tabela('manutencoes', list(columns.keys()), values)
             self.database.commit_without_return(query)
 
             self.r = {
@@ -74,12 +74,37 @@ class Backend():
             }
         except Exception as e:
             self.r = {
-                'error' : str(e),
-                'status': 400
+                'message' : {
+                    'error' : str(e)
+                },
+                'status' : 400
             }
 
         return self.r
 
+
+    def grava_envio_notificao(self, data):
+        try:
+            notificacao_id = data['NotificationId']
+            
+            query = self.gera_query.alterar_dados_da_tabela('notificacoes', ['enviada'], ['TRUE'], 
+                where=True, valor_where=notificacao_id, coluna_verificacao='id')
+
+            self.database.commit_without_return(query)
+
+            self.r = {
+                'message' : 'OK',
+                'status'  : 200
+            }
+        except Exception as e:
+            self.r = {
+                'message' : {
+                    'error' : str(e)
+                },
+                'status' : 400
+            }
+
+        return self.r
 
     def recusa_notificacao(self, data):
         try:
@@ -91,7 +116,7 @@ class Backend():
             car_id = self.database.return_car_id(license_plate)
             values = car_id
             values.append([x for x in list(data.values())[1:]])
-            query = self.gera_query.inserir_na_tabela('notificacoes_recusas', columns, [car_id, date, km])
+            query = self.gera_query.inserir_na_tabela('notificacoes_recusadas', columns, [car_id, date, km])
 
             self.database.commit_without_return(query)
 
@@ -101,8 +126,10 @@ class Backend():
             }
         except Exception as e:
             self.r = {
-                'error' : str(e),
-                'status': 400
+                'message' : {
+                    'error' : str(e)
+                },
+                'status' : 400
             }
 
         return self.r
@@ -117,7 +144,7 @@ class Backend():
             car_id = self.database.return_car_id(license_plate)
             columns = self.database.return_columns('carros_satisfactions')
 
-            query = self.gera_query.inserir_na_tabela('carros_satisfactions', columns, [car_id, rating, comment])
+            query = self.gera_query.inserir_na_tabela('carros_satisfacao', columns, [car_id, rating, comment])
             self.database.commit_without_return(query)
 
             self.r = {
@@ -127,15 +154,39 @@ class Backend():
 
         except Exception as e:
             self.r = {
-                'error' : str(e),
-                'status': 400
+                'message' : {
+                    'error' : str(e)
+                },
+                'status' : 400
             }
 
         return self.r
 
 
-    def agendar_limpeza(self, carro, date, immediataly = False):
-        print('Não implementado')      
+    def solicitar_limpeza(self, data):
+        try:
+            license_plate = data['LicensePlate']
+            requesting_user = data['RequestingUser']
+            
+            car_id = self.database.return_car_id(license_plate)
+
+            query = self.gera_query.inserir_na_tabela('notificacoes', ['carro', 'tipo', 'usuario'], [car_id, 0, requesting_user])    
+            
+            self.database.commit_without_return(query)
+
+            self.r = {
+                'message' : 'OK',
+                'status'  : 200
+            }
+        except Exception as e:
+            self.r = {
+                'message' : {
+                    'error' : str(e)
+                },
+                'status' : 400
+            }
+        
+        return self.r
 
 
     def infos_vehicle(self, data):
@@ -150,6 +201,8 @@ class Backend():
             self.r = {
                 'LastCleans' : last_cleans
             }
+        except:
+            pass
 
 
     def limpezas_veiculo(self, carro, limpeza):
@@ -157,9 +210,9 @@ class Backend():
             license_plate = data['LicensePlate']
             limpeza_id = data['LimpezaId']
 
-        query = self.gera_query.buscar_dados_da_tabela('limpeza', where= True, coluna_verificacao=['carro'], valor_where=carro)
+            query = self.gera_query.buscar_dados_da_tabela('limpeza', where= True, coluna_verificacao=['carro'], valor_where=carro)
 
-        limpeza = self.database.commit_with_return(query)
+            limpeza = self.database.commit_with_return(query)
 
         return limpeza
 
@@ -170,7 +223,10 @@ class Backend():
     
         except Exception as e:
             self.r = {
-                'error' : e
+                'message' : {
+                    'error' : str(e)
+                },
+                'status' : 400
             }
 
     
