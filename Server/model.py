@@ -3,10 +3,14 @@
 #__author__ = Jonas Duarte, duarte.jsystem@gmail.com
 #Python3
 __author__ = 'Jonas Duarte'
-
+import random
+import string
+import hashlib
 from mysql_manager import Gera_query
 from database_manager import Database
 from controller import Controller
+from random import randint
+
 
 class Backend():
     def __init__(self):
@@ -14,6 +18,54 @@ class Backend():
         self.gera_query = Gera_query()
         self.controller = Controller()
 
+
+    def gera_salt(self):
+        letras = string.ascii_uppercase
+
+        for x in range(0, 100):
+            salt = ''.join(random.choice(letras) for _ in range(3))
+            salt += str(randint(0,9))
+            salt += ''.join(random.choice(letras) for _ in range(3))
+
+        return salt
+
+
+    def novo_usuario(self, data):
+        try:
+            login = data['Login']
+            password = data['Password']
+            first_name = data['FirstName']
+            second_name = data['SecondName']
+            user_type   = data['UserType']
+
+            salt = self.gera_salt()
+
+            password = hashlib.md5(str(password + salt).encode())
+            password = password.hexdigest()
+
+
+            columns = self.database.return_columns('usuarios')
+            columns.pop('id')
+            dados = [login, first_name, second_name, '', password, salt, user_type]
+
+            query = self.gera_query.inserir_na_tabela('usuarios', columns, dados, string=True)
+
+            self.database.commit_without_return(query)
+
+            self.r = {
+                'message' : 'OK',
+                'status'  : 200
+            }
+
+        except Exception as e:
+            self.r = {
+                'message' : {
+                    'error' : str(e)
+                },
+                'status' : 401
+            }
+
+        return self.r
 
     def nova_limpeza(self, data):
         try:
@@ -187,97 +239,3 @@ class Backend():
             }
         
         return self.r
-
-
-    def infos_vehicle(self, data):
-        try:
-            license_plate = data['LicensePlate']
-
-            car_id = self.database.return_car_id(license_plate)
-
-            query = self.gera_query.buscar_dados_da_tabela('limpezas', True, coluna_verificacao = 'carro', valor_where=car_id)
-            last_cleans = self.database.commit_with_return(query)
-
-            self.r = {
-                'LastCleans' : last_cleans
-            }
-        except:
-            pass
-
-
-    def limpezas_veiculo(self, carro, limpeza):
-        try:
-            license_plate = data['LicensePlate']
-            limpeza_id = data['LimpezaId']
-
-            query = self.gera_query.buscar_dados_da_tabela('limpeza', where= True, coluna_verificacao=['carro'], valor_where=carro)
-
-            limpeza = self.database.commit_with_return(query)
-
-        return limpeza
-
-    
-    def info_limpeza(self, data):
-        try:
-            limpeza_id = data['Limpeza']
-    
-        except Exception as e:
-            self.r = {
-                'message' : {
-                    'error' : str(e)
-                },
-                'status' : 400
-            }
-
-    
-    def buscar_manutencao(self, carro, manutencao):
-        query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)[0][0]
-
-        query = self.gera_query.buscar_dados_da_tabela('limpezas_geral', where=True, coluna_verificacao=['carro'], valor_where=carro)
-        manutencao = self.database.commit_with_return(query)
-
-        return manutencao
-
-    def media_descuido(self, carro):
-        query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)[0][0]
-
-        query = 'select id from nascimentos where nascimento = "Notificação"'
-        id_notificacao = self.database.commit_with_return(query)
-
-        query = self.gera_query.query_media_descuido(carro, id_notificacao)
-        recusas, aceites = self.database.commit_with_return(query)
-        total = recusas + aceites
-
-        media = (recusas / total) * 100
-
-        return media
-
-
-    def relatorio_limpeza_por_motivo(self, carro):
-        print('Não implementado')
-
-
-    def media_avaliacao_carro(self, carro):
-        query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)[0][0]
-
-        query = self.gera_query.buscar_rating(carro)
-        rating = self.database.commit_with_return(query)
-
-        return rating
-
-
-    def ultima_limpeza_realizada(self, carro):
-        query = self.gera_query.buscar_id_carro(carro)
-        carro = self.database.commit_with_return(query)[0][0]
-
-        query = self.gera_query.buscar_ultima_limpeza_realizada(carro)
-        ultima_limpeza_realizada = self.database.commit_with_return(query)
-
-        return ultima_limpeza_realizada
-
-
-
-        

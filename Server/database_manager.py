@@ -67,10 +67,8 @@ class Database():
 
 
     def commit_without_return(self, query):
-        print(query)
         self.connect()
         try:
-            print('exe')
             self.cursor.execute(query)
         except:
             raise

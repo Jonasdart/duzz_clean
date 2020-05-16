@@ -1,3 +1,4 @@
+DROP DATABASE dclean;
 CREATE DATABASE dclean;
 use dclean;
 
@@ -9,6 +10,7 @@ Criação das tabelas de usuários
 create table usuarios
 (
     `id` INT(12) PRIMARY KEY AUTO_INCREMENT,
+    `login` VARCHAR(50) UNIQUE NOT NULL,
     `first_name` VARCHAR(50) NOT NULL,
     `second_name` VARCHAR(100) NOT NULL,
     `photo_path` VARCHAR(100),
